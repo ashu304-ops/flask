@@ -1,0 +1,33 @@
+pipeline{
+    agent  any
+
+    environment {
+        IMAGE_NAME= 'flask-jenkins-app'
+    }
+    stages {
+        stage('clone') {
+            steps {
+                git  branch: 'main', url: 'https://github.com/ashu304-ops/flask.git'
+            }
+        }
+        stage('Build  Docker  image') {
+            steps  {
+                script {
+                    docker.build("${IMAGE_NAME}")
+                }
+            }
+        }
+        stage('Test'){
+            steps{
+                script{
+                    def  app =docker.image("${IMAGE_NAME}")
+                    app.withRun('-p 5000:5000'){
+                        sleep 5
+                        sh 'curl  -f http://localhost:5000'
+                    }
+
+                }
+            }
+        }
+    }
+}
