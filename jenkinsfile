@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/your-username/medium-docker-jenkins-project.git'
+                git branch: 'main', url: 'https://github.com/ashu304-ops/flask.git'
             }
         }
 
@@ -24,8 +24,20 @@ pipeline {
                     docker run -d --name test-container -p 5000:5000 ${IMAGE_NAME}
                     sleep 5
                     curl -f http://localhost:5000
+                    curl -f http://localhost:5000/about
+                    curl -f http://localhost:5000/hello/ashu
                     docker stop test-container
                     docker rm test-container
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    docker stop flask-app || true
+                    docker rm flask-app || true
+                    docker run -d --name flask-app -p 5000:5000 ${IMAGE_NAME}
                 '''
             }
         }
@@ -33,7 +45,7 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
+            echo 'Pipeline finished and succes  it .'
         }
     }
 }
