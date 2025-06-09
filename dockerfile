@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy all files from the current directory into the container
-COPY flask/  /app
+COPY .  /app
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
