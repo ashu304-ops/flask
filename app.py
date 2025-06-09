@@ -8,7 +8,7 @@ def home():
 
 @app.route('/about')
 def about():
-    return "This  is flask app"
+    return "This  is flask app from jenkins"
 
 @app.route('/hello/<name>')
 def hello(name):
