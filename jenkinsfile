@@ -4,6 +4,9 @@ pipeline {
     environment {
         IMAGE_NAME = 'flask-jenkins-app'
     }
+    triggers {
+        pollSCM('H/5 * * * *') // Poll SCM every 5 minutes
+    }
 
     stages {
         stage('Clone') {
