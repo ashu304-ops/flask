@@ -35,19 +35,19 @@ sudo  service ssh start
 ip adddr show eth0
 
 3) click on cmd or powershell
-ssh -p 22 <username  of  wsl>@<ip address of eth0>
+ssh -p 22 <username_of_wsl>@<ip_address_of_eth0>
 
 successful then go  to step4
 
 4) Port forwarding 22 to  22  which can be accessible and go  to powershell  as administrator
 
-netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=22 connectaddress= <ip address of eh0> connectport=22
+netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=22 connectaddress= <ip_address_eh0> connectport=22
 5) allow  firewall to pass port 22
 
 New-NetFirewallRule -DisplayName "Allow SSH" -Direction Inbound -LocalPort 22 -Protocol TCP -Action Allow
 
 6) verifying on  powershell   
-ssh -p 22 <username  of  wsl>@<ip address of windows>
+ssh -p 22 <username_wsl>@<ip_address_windows>
 
 7) know the  ip  address of  windows 
 
@@ -77,7 +77,7 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub username@<ip addres of  windows>
 
 ------------------------
 [wsl]
-wslhost ansible_host=<ip address of  windows> ansible_user=username of wsl   ansible_port=22 ansible_ssh_private_key_file=~/.ssh/id_rsa (path to ssh rivate key)
+wslhost ansible_host=<ip_address_windows> ansible_user=username of wsl   ansible_port=22 ansible_ssh_private_key_file=~/.ssh/id_rsa (path to ssh rivate key)
 
 --------------------------
 
