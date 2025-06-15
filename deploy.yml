@@ -1,0 +1,20 @@
+- name: Deploy Docker app in WSL
+  hosts: wsl
+  #become: yes
+  tasks:
+    - name: Stop existing container if running
+      shell: docker stop app || true
+      ignore_errors: yes
+
+    - name: Remove container if it exists
+      shell: docker rm app || true
+      ignore_errors: yes
+
+    - name: Run new container
+      docker_container:
+        name: app
+        image: app-image:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "5000:5000"

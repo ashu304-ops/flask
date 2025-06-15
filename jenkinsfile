@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    environment {
+        WSL_USER = "ashu304"
+        WSL_HOST = "192.168.0.106"
+        WSL_PORT = "22"
+        REPO_URL = "https://github.com/ashu304-ops/flask.git"
+        REMOTE_DIR = "/home/ashu304/flask"
+        IMAGE_NAME = "app-image"
+    }
+
+    stages {
+        stage('Test SSH Connection to WSL') {
+            steps {
+                sh """
+                ssh -p ${WSL_PORT} ${WSL_USER}@${WSL_HOST} "echo 'Connected to WSL host!'"
+                """
+            }
+        }
+
+        stage('Clone Repo in WSL') {
+            steps {
+                sh """
+                ssh -p ${WSL_PORT} ${WSL_USER}@${WSL_HOST} '
+                    rm -rf ${REMOTE_DIR} &&
+                    git clone -b main ${REPO_URL} ${REMOTE_DIR}
+                '
+                """
+            }
+        }
+
+        stage('Build Docker Image in WSL') {
+            steps {
+                sh """
+                ssh -p ${WSL_PORT} ${WSL_USER}@${WSL_HOST} '
+                    cd ${REMOTE_DIR} &&
+                    docker build -t ${IMAGE_NAME} .
+                '
+                """
+            }
+        }
+
+        stage('Deploy with Ansible') {
+            steps {
+                sh 'ansible-playbook -i /Users/apple/task5/hosts.ini  /Users/apple/task5/deploy.yml'
+            }
+        }
+    }
+}
